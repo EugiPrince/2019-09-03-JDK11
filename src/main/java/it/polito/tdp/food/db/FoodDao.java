@@ -109,6 +109,31 @@ public class FoodDao {
 
 	}
 	
+	public List<String> getPortionDisplayName(int C) {
+		String sql = "SELECT DISTINCT portion_display_name " + 
+				"FROM portion " + 
+				"WHERE calories < ? " + 
+				"ORDER BY portion_display_name";
+		List<String> result = new ArrayList<>();
+		
+		Connection conn = DBConnect.getConnection();
+		try {
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setInt(1, C);
+			
+			ResultSet res = st.executeQuery();
+			while(res.next()) {
+				result.add(res.getString("portion_display_name"));
+			}
+			
+			conn.close();
+			return result;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 	
+	}
 
 }
