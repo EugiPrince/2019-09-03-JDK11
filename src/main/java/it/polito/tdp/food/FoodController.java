@@ -50,7 +50,32 @@ public class FoodController {
     @FXML
     void doCammino(ActionEvent event) {
     	txtResult.clear();
-    	txtResult.appendText("Cerco cammino peso massimo...");
+    	
+    	String partenza = this.boxPorzioni.getValue();
+    	Integer N;
+    	
+    	if(partenza == null) {
+    		this.txtResult.appendText("Devi selezionare una porzione");
+    		return;
+    	}
+    	
+    	try {
+    		N = Integer.parseInt(this.txtPassi.getText());
+    	} catch(NumberFormatException e) {
+    		this.txtResult.appendText("Inserisci un valore valido");
+    		return;
+    	}
+    	
+    	this.model.trovaPercorso(partenza, N);
+    	if(this.model.getBest() == null) {
+    		this.txtResult.appendText("Non ho trovato un cammino di lunghezza N");
+    	}
+    	else {
+    		this.txtResult.appendText("Cammino massimo trovato di peso: "+this.model.getPesoMax()+"\n");
+    		for(String v : this.model.getBest()) {
+    			this.txtResult.appendText(v+"\n");
+    		}
+    	}
     }
 
     @FXML
@@ -64,6 +89,7 @@ public class FoodController {
     	}
     	
     	List<PorzioneAdiacente> adiacenti = this.model.getAdiacenti(partenza);
+    	this.txtResult.appendText("Porzioni correlate a "+partenza+"\n");
     	for(PorzioneAdiacente pa : adiacenti)
     		this.txtResult.appendText(String.format("Nome: %s, peso: %f\n", pa.getNomePorzione(), pa.getPeso()));
     }
