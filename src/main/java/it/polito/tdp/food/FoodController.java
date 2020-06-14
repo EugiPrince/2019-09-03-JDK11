@@ -70,8 +70,11 @@ public class FoodController {
     		return;
     	}
     	
-    	this.model.creaGrafo(C);
+    	String msg = this.model.creaGrafo(C);
+    	this.boxPorzioni.getItems().clear();
+    	this.boxPorzioni.getItems().addAll(this.model.getVertici());
     	
+    	this.txtResult.appendText(msg);
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
